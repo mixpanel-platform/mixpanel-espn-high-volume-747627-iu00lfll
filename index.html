@@ -76,13 +76,13 @@
               .range(colors);
 
           var cards = svg.selectAll(".hour")
-              .data(data, function(d) {return d.day+':'+d.hour;});
+              .data(data, function(d) {return d.hour+':'+d.slot;});
 
           cards.append("title");
 
           cards.enter().append("rect")
               .attr("x", function(d) { return (d.hour - 1) * gridSize; })
-              .attr("y", function(d) { return (d.day - 1) * gridSize; })
+              .attr("y", function(d) { return (d.slot - 1) * gridSize; })
               .attr("rx", 4)
               .attr("ry", 4)
               .attr("class", "hour bordered")
@@ -120,20 +120,45 @@
 
         };  
       // make jql query toss here
+      var sample = [
+    {
+      "hour": 0,
+      "slot": "Slot 1",
+      "value": 458225
+    },
+    {
+      "hour": 0,
+      "slot": "Slots 6-10",
+      "value": 12151
+    },
+    {
+      "hour": 0,
+      "slot": "Slot 2",
+      "value": 50016
+    },
+    {
+      "hour": 0,
+      "slot": "Slot 4",
+      "value": 10034
+    },
+    {
+      "hour": 0,
+      "slot": "Slot 5",
+      "value": 6418
+    },]
+      heatmapChart(sample);
       
-      heatmapChart();
-      
-      var datasetpicker = d3.select("#dataset-picker").selectAll(".dataset-button")
-        .data(datasets);
+      // var datasetpicker = d3.select("#dataset-picker").selectAll(".dataset-button")
+      //   .data(datasets);
 
-      datasetpicker.enter()
-        .append("input")
-        .attr("value", function(d){ return "Dataset " + d })
-        .attr("type", "button")
-        .attr("class", "dataset-button")
-        .on("click", function(d) {
-          heatmapChart(d);
-        });
+      // datasetpicker.enter()
+      //   .append("input")
+      //   .attr("value", function(d){ return "Dataset " + d })
+      //   .attr("type", "button")
+      //   .attr("class", "dataset-button")
+      //   .on("click", function(d) {
+      //     heatmapChart(d);
+      //   });
     </script>
   </body>
 </html>
