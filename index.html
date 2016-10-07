@@ -39,25 +39,11 @@
           event_selectors: [{event: 'Page View', selector: 'defined (properties["Slot"])'}]
         })
         .groupBy([getHour, slotAggregate], mixpanel.reducer.count())
-        .groupBy(['key.0'], function(accs, items){
-          var res = {}
-          _.each(items, item => {
-            res[item.key[1]] = res[item.key[1]] + item.value || item.value
-          })
-          _.each(accs, acc =>{
-            _.each(acc, (v, k) =>{
-              res[k] = res[k] + v || v
-            })
-          })
-          return res
-        })
+        .filter(item => item.key[1] !== null)
         .map(item => {
-          var res = []
-          _.each(item.value, (val, slot) => {
-            if (slot !== null) res.push({hour: item.key[0], slot: Number(slot), value: val}) 
-          })
-          return res
+           return {hour: item.key[0], slot: Number(item.key[1]), value: item.value}
         })
+        
       }
       
       function getHour(event){
