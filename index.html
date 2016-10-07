@@ -132,16 +132,18 @@
               .attr("width", gridSize)
               .attr("height", gridSize)
               .style("fill", colors[0]);
-          var colorIndex = d3.scale.quantile()
+          var colorIndex = function(d) {
+            return d3.scale.quantile()
               .range([0, buckets - 1])
               .domain(slotValueExtent[d.slot]);
+          }
           cards
             .transition()
             .delay(function(d){      
                 return (d.hour)*24;
               })
             .duration(1000)
-            .style('fill', function(d) { return colors[colorIndex(d.value)]});
+            .style('fill', function(d) { return colors[colorIndex(d)]});
             
 
           cards.select("title").text(function(d) { return d.value; });
