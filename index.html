@@ -99,14 +99,13 @@
             .attr("class", function(d, i) { return ((i >= 7 && i <= 16) ? "slotLabel mono axis axis-slot" : "slotLabel mono axis"); });
 
       var heatmapChart = function(data) {
-          debugger
           console.log(data)
           var colorScale = d3.scale.quantile()
               .domain([0, buckets - 1, d3.max(data, function (d) { return d.value; })])
               .range(colors);
 
           var cards = svg.selectAll(".hour")
-              .data(data, function(d) {console.log(d);return d.hour+':'+d.slot;});
+              .data(data, function(d) {debugger;return d.hour+':'+d.slot;});
 
           cards.append("title");
 
@@ -134,17 +133,17 @@
               .attr("class", "legend");
 
           legend.append("rect")
-            .attr("x", function(d, i) { return legendElementWidth * i; })
-            .attr("y", height)
-            .attr("width", legendElementWidth)
-            .attr("height", gridSize / 2)
+            .attr("y", function(d, i) { return legendElementWidth * i; })
+            .attr("x", height)
+            .attr("height", legendElementWidth)
+            .attr("width", gridSize / 2)
             .style("fill", function(d, i) { return colors[i]; });
 
           legend.append("text")
             .attr("class", "mono")
             .text(function(d) { return "≥ " + Math.round(d); })
-            .attr("x", function(d, i) { return legendElementWidth * i; })
-            .attr("y", height + gridSize);
+            .attr("y", function(d, i) { return legendElementWidth * i; })
+            .attr("x", height + gridSize);
 
           legend.exit().remove();
 
