@@ -112,7 +112,7 @@
             .attr("transform", "translate(" + gridSize / 2 + ", -6)")
             .attr("class", function(d, i) { return ((i >= 7 && i <= 16) ? "slotLabel mono axis axis-slot" : "slotLabel mono axis"); });
 
-      var heatmapChart = function(err, data) {
+      var heatmapChart = function(data) {
           debugger
           console.log(data)
           var colorScale = d3.scale.quantile()
@@ -192,7 +192,7 @@
         },]
         var $query = $('#query').html
         MP.api.jql($query).done(function(data){
-          heatmapChart({}data)
+          heatmapChart(data)
         })
       
       // var datasetpicker = d3.select("#dataset-picker").selectAll(".dataset-button")
