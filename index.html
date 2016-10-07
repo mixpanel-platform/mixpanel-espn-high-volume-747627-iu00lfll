@@ -143,11 +143,10 @@
             .duration(1000)
             .style('fill', function(d) { 
               debugger;  
-              var ind = d3.scale.quantile()
+              var color = d3.scale.quantile()
                           .range([0, buckets - 1])
                           .domain(slotValueExtent[d.slot])
-              return colors[ind]
-      
+              return colors[color(d.value)]
             });
             
 
