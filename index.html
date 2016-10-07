@@ -82,8 +82,8 @@
           cards.append("title");
 
           cards.enter().append("rect")
-              .attr("x", function(d) { return (d.hour - 1) * gridSize; })
-              .attr("y", function(d) { return (d.slot - 1) * gridSize; })
+              .attr("x", function(d) { return (d.hour) * gridSize; })
+              .attr("y", function(d) { return (d.slot) * gridSize; })
               .attr("rx", 4)
               .attr("ry", 4)
               .attr("class", "hour bordered")
@@ -124,27 +124,27 @@
       var sample = [
         {
           "hour": 0,
-          "slot": "Slot 1",
+          "slot": 1,
           "value": 458225
         },
         {
           "hour": 0,
-          "slot": "Slots 6-10",
-          "value": 12151
-        },
-        {
-          "hour": 0,
-          "slot": "Slot 2",
+          "slot": 2,
           "value": 50016
         },
         {
           "hour": 0,
-          "slot": "Slot 4",
+          "slot": 3,
+          "value": 18581
+        },
+        {
+          "hour": 0,
+          "slot": 4,
           "value": 10034
         },
         {
           "hour": 0,
-          "slot": "Slot 5",
+          "slot": 5,
           "value": 6418
         },]
       heatmapChart({},sample);
