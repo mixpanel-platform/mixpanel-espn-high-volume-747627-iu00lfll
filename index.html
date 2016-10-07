@@ -31,6 +31,49 @@
     <div class="heatmap"></div>
     <div class="activityIndex"></div>
     <div class="sourceIndex"></div>
+    <script id='query'>
+      function main() {
+        return Events({
+          from_date: new Date().toISOString().split('T')[0],
+          to_date:   new Date().toISOString().split('T')[0],
+          event_selectors: [{event: 'Page View', selector: 'defined (properties["Slot"])'}]
+        })
+        .groupBy([getHour, slotAggregate], mixpanel.reducer.count())
+        .groupBy(['key.0'], function(accs, items){
+          var res = {}
+          _.each(items, item => {
+            res[item.key[1]] = res[item.key[1]] + item.value || item.value
+          })
+          _.each(accs, acc =>{
+            _.each(acc, (v, k) =>{
+              res[k] = res[k] + v || v
+            })
+          })
+          return res
+        })
+        .map(item => {
+          var res = []
+          _.each(item.value, (val, slot) => {
+            if (slot !== null) res.push({hour: item.key[0], slot: Number(slot), value: val}) 
+          })
+          return res
+        })
+      }
+      
+      function getHour(event){
+        return new Date(event.time).getHours()
+      }
+      
+      function slotAggregate(event){
+        var slot
+        if (event.properties.Slot > 5 && event.properties.Slot <= 10){
+          slot = 6
+        } else if ( event.properties.Slot <= 5 ){
+          slot = event.properties.Slot
+        }
+        return slot
+      }
+    </script>
     <script>
         var margin = { top: 50, right: 0, bottom: 100, left: 30 },
         width = 1500 - margin.left - margin.right,
@@ -147,7 +190,10 @@
           "slot": 5,
           "value": 6418
         },]
-      heatmapChart({},sample);
+        var $query = $('#query').html
+        MP.api.jql($query).done(function(data){
+          heatmapChart({}data)
+        })
       
       // var datasetpicker = d3.select("#dataset-picker").selectAll(".dataset-button")
       //   .data(datasets);
