@@ -133,9 +133,7 @@
               .attr("height", gridSize)
               .style("fill", colors[0]);
           var colorIndex = function(d) {
-            return d3.scale.quantile()
-              .range([0, buckets - 1])
-              .domain(slotValueExtent[d.slot]);
+            return;
           }
           cards
             .transition()
@@ -143,7 +141,14 @@
                 return (d.hour)*24;
               })
             .duration(1000)
-            .style('fill', function(d) { debugger; return colors[colorIndex(d)]});
+            .style('fill', function(d) { 
+              debugger;  
+              var ind = d3.scale.quantile()
+                          .range([0, buckets - 1])
+                          .domain(slotValueExtent[d.slot])
+              return colors[ind]
+      
+            });
             
 
           cards.select("title").text(function(d) { return d.value; });
