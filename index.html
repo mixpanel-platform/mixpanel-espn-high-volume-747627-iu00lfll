@@ -145,7 +145,7 @@
                 .range([0, buckets - 1])
                 .domain(slotValueExtent[d.slot]);
                 debugger
-              return d3.interpolate(a,colors[colorIndex(d.value)]);
+              return colors[colorIndex(d.value)];
             });
             
 
