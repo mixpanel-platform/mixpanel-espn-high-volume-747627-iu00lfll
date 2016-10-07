@@ -52,7 +52,6 @@
       var timeLabels = svg.selectAll(".timeLabel")
           .data(times)
           .enter().append("text")
-            .enter().append("text")
             .text(function (d) { return d; })
             .attr("x", 0)
             .attr("y", function (d, i) { return i * gridSize; })
@@ -135,9 +134,6 @@
         .on("click", function(d) {
           heatmapChart(d);
         });
-    </script>
-
-      
     </script>
   </body>
 </html>
