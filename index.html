@@ -132,10 +132,11 @@
               .attr("width", gridSize)
               .attr("height", gridSize)
               .style("fill", colors[0]);
-          var colorIndex = function(d) 
-            d3.scale.quantile()
-              .range([0, buckets - 1])
-              .domain(slotValueExtent[d.slot]);
+          var colorIndex = function(d) {
+            return d3.scale.quantile()
+                    .range([0, buckets - 1])
+                    .domain(slotValueExtent[d.slot]);
+          }
               
           cards
             .transition()
