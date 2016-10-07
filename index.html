@@ -52,12 +52,13 @@
       var timeLabels = svg.selectAll(".timeLabel")
           .data(times)
           .enter().append("text")
+            .enter().append("text")
             .text(function (d) { return d; })
-            .attr("x", function(d, i) { return i * gridSize; })
-            .attr("y", 0)
+            .attr("x", 0)
+            .attr("y", function (d, i) { return i * gridSize; })
             .style("text-anchor", "end")
-            .attr("transform", "translate(" + gridSize / 2 + ", -6)")
-            .attr("class", function(d, i) { return ((i >= 7 && i <= 16) ? "timeLabel mono axis axis-worktime" : "timeLabel mono axis"); });
+            .attr("transform", "translate(-6," + gridSize / 1.5 + ")")
+            .attr("class", function (d, i) { return ((i >= 0 && i <= 4) ? "timeLabel mono axis axis-time" : "timeLabel mono axis"); });
 
       var slotLabels = svg.selectAll(".slotLabel")
           .data(slots)
@@ -67,7 +68,7 @@
             .attr("y", 0)
             .style("text-anchor", "middle")
             .attr("transform", "translate(" + gridSize / 2 + ", -6)")
-            .attr("class", function(d, i) { return ((i >= 7 && i <= 16) ? "slotLabel mono axis axis-slottime" : "slotLabel mono axis"); });
+            .attr("class", function(d, i) { return ((i >= 7 && i <= 16) ? "slotLabel mono axis axis-slot" : "slotLabel mono axis"); });
 
       var heatmapChart = function(err, data) {
           debugger
