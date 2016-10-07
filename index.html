@@ -190,7 +190,7 @@
           "slot": 5,
           "value": 6418
         },]
-        var $query = $('#query').html
+        var $query = $('#query').html()
         MP.api.jql($query).done(function(data){
           heatmapChart(data)
         })
