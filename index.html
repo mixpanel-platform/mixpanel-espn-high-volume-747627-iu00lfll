@@ -106,7 +106,7 @@
               .range(colors);
 
           var cards = svg.selectAll(".hour")
-              .data(data, function(d) {return d.hour+':'+d.slot;});
+              .data(data, function(d) {console.log(d);return d.hour+':'+d.slot;});
 
           cards.append("title");
 
@@ -150,32 +150,6 @@
 
         };  
       // make jql query toss here
-      var sample = [
-        {
-          "hour": 0,
-          "slot": 1,
-          "value": 458225
-        },
-        {
-          "hour": 0,
-          "slot": 2,
-          "value": 50016
-        },
-        {
-          "hour": 0,
-          "slot": 3,
-          "value": 18581
-        },
-        {
-          "hour": 0,
-          "slot": 4,
-          "value": 10034
-        },
-        {
-          "hour": 0,
-          "slot": 5,
-          "value": 6418
-        },]
         var $query = $('#query').html()
         MP.api.jql($query).done(function(data){
           heatmapChart(data)
