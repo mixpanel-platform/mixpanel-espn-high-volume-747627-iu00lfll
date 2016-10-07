@@ -100,7 +100,7 @@
 
       var heatmapChart = function(data) {
           var colorScale = d3.scale.quantile()
-              .domain([0, buckets - 1, d3.max(data, function (d) { return d.value; })])
+              .domain([0, buckets - 1])
               .range(colors);
 
           var cards = svg.selectAll(".hour")
@@ -125,26 +125,26 @@
           
           cards.exit().remove();
 
-          // var legend = svg.selectAll(".legend")
-          //     .data([0].concat(colorScale.quantiles()), function(d) { return d; });
+          var legend = svg.selectAll(".legend")
+              .data([0].concat(colorScale.quantiles()), function(d) { return d; });
 
-          // legend.enter().append("g")
-          //     .attr("class", "legend");
+          legend.enter().append("g")
+              .attr("class", "legend");
 
-          // legend.append("rect")
-          //   .attr("y", function(d, i) { return legendElementWidth * i; })
-          //   .attr("x", height)
-          //   .attr("height", legendElementWidth)
-          //   .attr("width", gridSize / 2)
-          //   .style("fill", function(d, i) { return colors[i]; });
+          legend.append("rect")
+            .attr("y", function(d, i) { return legendElementWidth * i; })
+            .attr("x", height)
+            .attr("height", legendElementWidth)
+            .attr("width", gridSize / 2)
+            .style("fill", function(d, i) { return colors[i]; });
 
-          // legend.append("text")
-          //   .attr("class", "mono")
-          //   .text(function(d) { return "≥ " + Math.round(d); })
-          //   .attr("y", function(d, i) { return legendElementWidth * i; })
-          //   .attr("x", height + gridSize);
+          legend.append("text")
+            .attr("class", "mono")
+            .text(function(d) { return "≥ " + Math.round(d); })
+            .attr("y", function(d, i) { return legendElementWidth * i; })
+            .attr("x", height + gridSize);
 
-          // legend.exit().remove();
+          legend.exit().remove();
 
         };  
       // make jql query toss here
