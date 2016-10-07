@@ -66,8 +66,9 @@
         height = 2000 - margin.top - margin.bottom,
         gridSize = Math.floor(width / 24),
         legendElementWidth = gridSize*2,
-        buckets = 9,
-        colors = ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"], // alternatively colorbrewer.YlGnBu[9]
+        colors = ['#f7fcfd','#e5f5f9','#ccece6','#99d8c9','#66c2a4','#41ae76','#238b45','#006d2c','#00441b'] 
+        buckets = colors.length,
+        // alternatively colorbrewer.YlGnBu[9]
         slots = ["Feed", "Slot 1", "Slot 2", "Slot 3", "Slot 4", "Slot 5", "Slot 6-10"],
         times = ["1a", "2a", "3a", "4a", "5a", "6a", "7a", "8a", "9a", "10a", "11a", "12a", "1p", "2p", "3p", "4p", "5p", "6p", "7p", "8p", "9p", "10p", "11p", "12p"];
         datasets = ["data.tsv", "data2.tsv"];
@@ -99,10 +100,24 @@
             .attr("class", function(d, i) { return ((i >= 7 && i <= 16) ? "slotLabel mono axis axis-slot" : "slotLabel mono axis"); });
 
       var heatmapChart = function(data) {
-          var colorScale = d3.scale.quantile()
-              .domain([0, buckets - 1])
-              .range(colors);
-
+        //data vars for rendering
+        var slotExtent = null,
+          dayOffset = 0,
+          slotValueExtent = {},
+          max = 0
+        _.each(data, function(cell){
+          var hour = cell.hour
+          var slot = cell.slot
+          var slotData = slotValueExtent[slot] = (slotValueExtent[slot] || [1000,-1]);
+          var value = cell.value;
+          
+          // gets the min max for each slot
+          slotData[0] = d3.min([slotData[0],value]);
+          slotData[1] = d3.max([slotData[1],value]);
+          max = d3.max([value, max])
+        });
+        
+         
           var cards = svg.selectAll(".hour")
               .data(data, function(d) {return d.slot+':'+d.hour;});
 
@@ -118,33 +133,45 @@
               .attr("height", gridSize)
               .style("fill", colors[0]);
 
-          cards.transition().duration(1000)
-              .style("fill", function(d) { return colorScale(d.value); });
+          cards
+            .transition()
+            .delay(function(d){      
+                return (d.hour)*24;
+              })
+          .duration(1000)
+          .attrTween('fill',function(d,i,a){
+            //choose color dynamicly      
+            var colorIndex = d3.scale.quantile()
+              .range([0, buckets - 1])
+              .domain(slotValueExtent[d.slot]);
+            return d3.interpolate(a,colors[colorIndex(d.value)]);
+          });
+            
 
           cards.select("title").text(function(d) { return d.value; });
           
           cards.exit().remove();
 
-          var legend = svg.selectAll(".legend")
-              .data([0].concat(colorScale.quantiles()), function(d) { return d; });
+          // var legend = svg.selectAll(".legend")
+          //     .data([0].concat(colorScale.quantiles()), function(d) { return d; });
 
-          legend.enter().append("g")
-              .attr("class", "legend");
+          // legend.enter().append("g")
+          //     .attr("class", "legend");
 
-          legend.append("rect")
-            .attr("y", function(d, i) { return legendElementWidth * i; })
-            .attr("x", height)
-            .attr("height", legendElementWidth)
-            .attr("width", gridSize / 2)
-            .style("fill", function(d, i) { return colors[i]; });
+          // legend.append("rect")
+          //   .attr("y", function(d, i) { return legendElementWidth * i; })
+          //   .attr("x", height)
+          //   .attr("height", legendElementWidth)
+          //   .attr("width", gridSize / 2)
+          //   .style("fill", function(d, i) { return colors[i]; });
 
-          legend.append("text")
-            .attr("class", "mono")
-            .text(function(d) { return "≥ " + Math.round(d); })
-            .attr("y", function(d, i) { return legendElementWidth * i; })
-            .attr("x", height + gridSize);
+          // legend.append("text")
+          //   .attr("class", "mono")
+          //   .text(function(d) { return "≥ " + Math.round(d); })
+          //   .attr("y", function(d, i) { return legendElementWidth * i; })
+          //   .attr("x", height + gridSize);
 
-          legend.exit().remove();
+          // legend.exit().remove();
 
         };  
       // make jql query toss here
@@ -152,18 +179,6 @@
         MP.api.jql($query).done(function(data){
           heatmapChart(data)
         })
-      
-      // var datasetpicker = d3.select("#dataset-picker").selectAll(".dataset-button")
-      //   .data(datasets);
-
-      // datasetpicker.enter()
-      //   .append("input")
-      //   .attr("value", function(d){ return "Dataset " + d })
-      //   .attr("type", "button")
-      //   .attr("class", "dataset-button")
-      //   .on("click", function(d) {
-      //     heatmapChart(d);
-      //   });
     </script>
   </body>
 </html>
